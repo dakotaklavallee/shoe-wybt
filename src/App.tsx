@@ -80,30 +80,35 @@ function App() {
 
   return (
     <div style={{ height: "100vh" }}>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage 
-            mainUser={mainUser} 
-            isAuthenticated={isAuthenticated} 
-            userAvatar={userAvatar}
-            />
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <LoginPage
-              signInHandler={signInHandler}
-              signOutHandler={signOutHandler}
-              isAuthenticated={isAuthenticated}
-            />
-          }
-        />
-        <Route path="/user" element={<UserPage userAvatar={userAvatar} />} />
-      </Routes>
+      <Navbar avatar={userAvatar} />
+      <div className="container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                mainUser={mainUser}
+                isAuthenticated={isAuthenticated}
+                userAvatar={userAvatar}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                signInHandler={signInHandler}
+                signOutHandler={signOutHandler}
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+          <Route
+            path="/user"
+            element={<UserPage userAvatar={userAvatar} user={mainUser} />}
+          />
+        </Routes>
+      </div>
     </div>
   );
 }
