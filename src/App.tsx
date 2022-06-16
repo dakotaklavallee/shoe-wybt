@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Footer from "./Components/Constants/Footer";
 import HomePage from "./Components/Landings/HomePage";
 import LoginPage from "./Components/Landings/LoginPage";
-import Navbar from "./Components/Constants/Navbar";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./App.css";
 import axios from "axios";
+import Survey from "./Components/Surveys/Survey";
 import UserPage from "./Components/Landings/UserPage";
 
 function App() {
@@ -14,6 +15,13 @@ function App() {
   const [users, setUsers] = useState([]);
   const [avatars, setAvatars] = useState([]);
   const [userAvatar, setUserAvatar] = useState({});
+  const [surveys, setSurveys] = useState([]);
+  const [showTransition, setShowTransition] = useState(false);
+
+  const handleTransition = () => {
+    setShowTransition(true);
+    setTimeout(() => setShowTransition(false), 1500);
+  };
 
   useEffect(() => {
     async function fetchUsers() {
@@ -68,6 +76,22 @@ function App() {
     fetchAvatars();
   }, []);
 
+  useEffect(() => {
+    async function fetchSurveys() {
+      try {
+        const options = {
+          method: "GET",
+          url: `${process.env.REACT_APP_SERVER_URL}/surveys`,
+        };
+        const response = await axios.request(options);
+        setSurveys(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchSurveys();
+  }, []);
+
   const signInHandler = async (e: any) => {
     e.preventDefault();
     await loginWithRedirect();
@@ -79,8 +103,7 @@ function App() {
   };
 
   return (
-    <div style={{ height: "100vh" }}>
-      <Navbar avatar={userAvatar} />
+    <div>
       <div className="container">
         <Routes>
           <Route
@@ -90,6 +113,17 @@ function App() {
                 mainUser={mainUser}
                 isAuthenticated={isAuthenticated}
                 userAvatar={userAvatar}
+                todaysSurvey={surveys[0]}
+              />
+            }
+          />
+          <Route
+            path="/surveys/:survey_id"
+            element={
+              <Survey
+                todaysSurvey={surveys[0]}
+                showTransition={showTransition}
+                handleTransition={handleTransition}
               />
             }
           />
@@ -109,6 +143,7 @@ function App() {
           />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

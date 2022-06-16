@@ -1,27 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import './UserPage.css';
+import "./UserPage.css";
 
 export default function UserPage({ userAvatar, user }: any) {
   return (
-    <div style={{height: "100vh"}} className="col">
-      <div className="row d-flex justify-content-center mt-3">
-        <h1>{user.username}</h1>
-      </div>
-      <div className="row d-flex justify-content-center mt-3">
-        <img className="user-avatar" src={userAvatar.avatar_url} alt="avatar" />
-      </div>
-      <div className="row d-flex justify-content-center mt-3">
-          <h2>Total Points:</h2>
-      </div>
-      <div className="row d-flex justify-content-center mt-3">
-          <h5>{user.points}</h5>
-      </div>
-      <div className="row d-flex justify-content-center mt-3">
-          <Link to="/rewards" className="btn btn-secondary">Redeem Points</Link>
-      </div>
-      <div className="row d-flex justify-content-center mt-3">
-          <Link to="/" className="btn btn-danger">Return Home</Link>
+    <div style={{height:"90vh"}} className="d-flex align-items-center justify-content-center">
+      <div className="card text-center" style={{width:"80vh"}}>
+        <div className="card-header" style={{ backgroundColor: "#000" }}>
+          <h1>{user.username}</h1>
+        </div>
+        <div>
+          <img
+            className="user-avatar"
+            src={userAvatar.avatar_url}
+            alt="avatar"
+          />
+        </div>
+        <div className="card-body">
+          <h5>Total Points: {user.points}</h5>
+          <Link to="/rewards" className="btn btn-secondary col-12 mt-2">
+            Redeem Points
+          </Link>
+          <Link to="/rewards" className="btn btn-secondary col-12 mt-3">
+            Change Avatar
+          </Link>
+        </div>
       </div>
     </div>
   );

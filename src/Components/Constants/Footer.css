@@ -1,0 +1,8 @@
+.footer-class, .footer-class div, .footer-class Link{
+    background-color: rgba(9, 9, 9, 0.2);
+}
+.footer-class{
+    border: 2px;
+    border-style: solid;
+    border-color: #fff;
+}
