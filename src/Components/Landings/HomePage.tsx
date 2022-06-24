@@ -1,21 +1,54 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import NoMoreSurveys from "../Surveys/NoMoreSurveys";
 import SurveyDisplay from "../Surveys/SurveyDisplay";
 
-export default function HomePage({ mainUser, isAuthenticated, todaysSurvey, handleTransition }: any) {
-
+export default function HomePage({
+  mainUser,
+  isAuthenticated,
+  todaysSurvey,
+  handleTransition,
+}: any) {
+  const initialUser = {
+    survey_done: false,
+  };
+  const [currentUser, setCurrentUser] = useState(initialUser);
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        if (Object.keys(mainUser).length) {
+          const options = {
+            method: "GET",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${mainUser.user_id}`,
+          };
+          const response = await axios.request(options);
+          setCurrentUser(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchCurrentUser();
+  });
   return (
     <>
-      {isAuthenticated ? (
+      {isAuthenticated && currentUser ? (
         <div className="home">
           <div className="mt-4">
             <h1>shoe inc.</h1>
           </div>
-          <div style={{height: "75vh"}} className="d-flex align-items-center justify-content-center">
-            {mainUser.survey_done === false ? (
-              <SurveyDisplay todaysSurvey={todaysSurvey} handleTransition={handleTransition} />
+          <div
+            style={{ height: "75vh" }}
+            className="d-flex align-items-center justify-content-center"
+          >
+            {!currentUser.survey_done ? (
+              <SurveyDisplay
+                user={mainUser}
+                todaysSurvey={todaysSurvey}
+                handleTransition={handleTransition}
+              />
             ) : (
               <NoMoreSurveys />
             )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Footer from "./Components/Constants/Footer";
 import HomePage from "./Components/Landings/HomePage";
 import LoginPage from "./Components/Landings/LoginPage";
@@ -123,6 +123,7 @@ function App() {
             element={
               <Survey
                 todaysSurvey={surveys[0]}
+                user={mainUser}
                 showTransition={showTransition}
                 handleTransition={handleTransition}
               />

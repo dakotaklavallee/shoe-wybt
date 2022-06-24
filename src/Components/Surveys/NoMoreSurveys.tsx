@@ -1,4 +1,6 @@
 import React from 'react';
 export default function NoMoreSurveys(){
-    return null;
+    return (
+    <div>No More For Today!</div>
+    );
 }

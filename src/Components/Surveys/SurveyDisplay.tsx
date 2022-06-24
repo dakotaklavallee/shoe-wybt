@@ -1,30 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import './SurveyDisplay.css'; 
+import React from "react";
+import SurveyDisplayCard from "./SurveyDisplayCard";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./SurveyDisplay.css";
 
-export default function SurveyDisplay({todaysSurvey, handleTransition}: any){
-    const navigate = useNavigate();
-    const handleBegin = (e) =>{
-        handleTransition();
-        navigate(`/surveys/${todaysSurvey.survey_id}`);
+export default function SurveyDisplay({
+  user,
+  todaysSurvey,
+  handleTransition,
+}: any) {
+  const initialUser = {
+    survey_index: 0,
+    survey_done: false,
+  };
+  const [currentUser, setCurrentUser] = useState(initialUser);
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        if (Object.keys(user).length) {
+          const options = {
+            method: "GET",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}`,
+          };
+          const response = await axios.request(options);
+          setCurrentUser(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    return (
+    fetchCurrentUser();
+  });
+
+  const navigate = useNavigate();
+  const handleBegin = (e) => {
+    handleTransition();
+    navigate(`/surveys/${todaysSurvey.survey_id}`);
+  };
+  return (
+    <>
+      {Object.keys(todaysSurvey).length && Object.keys(currentUser) ? (
         <>
-        {Object.keys(todaysSurvey).length ? 
-        <div className="card text-center" style={{width: "30rem"}}>
-            <div className="card-header" style={{backgroundColor: "#000"}}>
-            {todaysSurvey.survey_name}
-            </div>
-            <div className="image-vibe"></div>
-            <div className="card-body display-me">
-                <p className="card-text">{todaysSurvey.survey_description}</p>
-                <button onClick={handleBegin} className="btn btn-secondary">Begin Survey</button>
-            </div>
-        </div>
-        : <div>
-            <h3>Loading...</h3>
-            </div>}
+          {currentUser.survey_done === false ? (
+            <SurveyDisplayCard
+              handleBegin={handleBegin}
+              todaysSurvey={todaysSurvey}
+              currentUser={currentUser}
+            />
+          ) : null}
         </>
-    );
+      ) : (
+        <div>
+          <h3>Loading...</h3>
+        </div>
+      )}
+    </>
+  );
 }

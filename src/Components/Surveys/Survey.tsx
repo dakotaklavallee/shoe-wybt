@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ShoeLoading from "../Transitions/ShoeLoading";
-export default function Survey({ showTransition, handleTransition }: any) {
+export default function Survey({ showTransition, user }: any) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const initialSurveyData = {
@@ -25,7 +25,7 @@ export default function Survey({ showTransition, handleTransition }: any) {
     ...initialProductData,
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(currentProduct);
+  console.log(currentIndex);
 
   useEffect(() => {
     async function fetchSurveys() {
@@ -41,29 +41,86 @@ export default function Survey({ showTransition, handleTransition }: any) {
             (a, b) => a.product_id - b.product_id
           )
         );
-        setCurrentProduct(response.data.data[0].products[0]);
+        setCurrentProduct(response.data.data[0].products[currentIndex]);
       } catch (error) {
         console.log(error);
       }
     }
-    fetchSurveys();
-  }, []);
+    async function userFetch() {
+      try {
+        const options = {
+          method: "GET",
+          url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}`,
+        };
+        const response = await axios.request(options);
+        console.log(response.data.data);
+        setCurrentIndex(response.data.data.survey_index - 1);
+        fetchSurveys();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    userFetch();
+  }, [user.survey_index, currentIndex, user.user_id]);
+
+  const finishUserSurvey = async () => {
+    try {
+      const data = user;
+      const options = {
+        method: "PUT",
+        url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/finishSurvey`,
+        data: { data },
+      };
+      const response = await axios.request(options);
+      if (response) {
+        console.log(response, "Finished User");
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addPointsForUser = async () => {
+    try {
+      const data = user;
+      const options = {
+        method: "PUT",
+        url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/points`,
+        data: { data },
+      };
+      const response = await axios.request(options);
+      if (response) {
+        console.log(response, "Added Points");
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleYes = async (e) => {
     e.preventDefault();
     async function updateYes() {
       try {
+        const data = user;
         if (currentIndex < products.length - 1) {
           const options = {
             method: "PUT",
             url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/yes`,
             data: { currentProduct },
           };
-          const response = await axios.request(options);
-          if (response) {
+          const options2 = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/advance`,
+            data: { data },
+          };
+          const response1 = await axios.request(options);
+          const response2 = await axios.request(options2);
+          if (response1 && response2) {
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
-            console.log(response, "got em");
+            console.log(response1, response2, "got em");
           }
         } else {
           const options = {
@@ -71,10 +128,20 @@ export default function Survey({ showTransition, handleTransition }: any) {
             url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/yes`,
             data: { currentProduct },
           };
-          const response = await axios.request(options);
-          if (response) {
-            console.log(response, "finished");
-            navigate("/");
+          const options2 = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/advance`,
+            data: { data },
+          };
+          const response1 = await axios.request(options);
+          const response2 = await axios.request(options2);
+          if (response1 && response2) {
+            const finishedUser = await finishUserSurvey();
+            const pointsAdded = await addPointsForUser();
+            if (finishedUser && pointsAdded) {
+              console.log(response1, response2, "finished");
+              navigate("/");
+            }
           }
         }
       } catch (error) {
@@ -89,14 +156,21 @@ export default function Survey({ showTransition, handleTransition }: any) {
     e.preventDefault();
     async function updateNo() {
       try {
+        const data = user;
         if (currentIndex < products.length - 1) {
           const options = {
             method: "PUT",
             url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/no`,
             data: { currentProduct },
           };
+          const options2 = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/advance`,
+            data: { data },
+          };
           const response = await axios.request(options);
-          if (response) {
+          const response2 = await axios.request(options2);
+          if (response && response2) {
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
             console.log(response, "got em");
@@ -107,8 +181,14 @@ export default function Survey({ showTransition, handleTransition }: any) {
             url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/no`,
             data: { currentProduct },
           };
+          const options2 = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/advance`,
+            data: { data },
+          };
           const response = await axios.request(options);
-          if (response) {
+          const response2 = await axios.request(options2);
+          if (response && response2) {
             console.log(response, "finished");
             navigate("/");
           }
@@ -119,7 +199,7 @@ export default function Survey({ showTransition, handleTransition }: any) {
     }
     updateNo();
     console.log("Went through");
-  }
+  };
 
   return (
     <div>
@@ -132,10 +212,7 @@ export default function Survey({ showTransition, handleTransition }: any) {
         >
           <>
             {survey && currentProduct ? (
-              <div 
-              className="card text-center"
-              style={{width:"30rem"}}
-              >
+              <div className="card text-center" style={{ width: "30rem" }}>
                 <div
                   className="card-header"
                   style={{ backgroundColor: "#000" }}
@@ -143,7 +220,11 @@ export default function Survey({ showTransition, handleTransition }: any) {
                   {currentProduct.product_name}
                 </div>
                 <div className="card-img">
-                  <img className="img-fluid" src={currentProduct.product_img} alt="product" />
+                  <img
+                    className="img-fluid"
+                    src={currentProduct.product_img}
+                    alt="product"
+                  />
                 </div>
                 <div className="card-body display-me">
                   <p className="card-text">
@@ -158,10 +239,10 @@ export default function Survey({ showTransition, handleTransition }: any) {
                     >
                       Yes
                     </button>
-                    <button 
-                    type="button" 
-                    onClick={handleNo}
-                    className="btn btn-danger ml-2"
+                    <button
+                      type="button"
+                      onClick={handleNo}
+                      className="btn btn-danger ml-2"
                     >
                       No
                     </button>
@@ -175,7 +256,7 @@ export default function Survey({ showTransition, handleTransition }: any) {
               </div>
             ) : (
               <div>
-                <h3>Loading...</h3>
+                <ShoeLoading />
               </div>
             )}
           </>
