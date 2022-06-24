@@ -85,6 +85,42 @@ export default function Survey({ showTransition, handleTransition }: any) {
     console.log("Went through");
   };
 
+  const handleNo = async (e) => {
+    e.preventDefault();
+    async function updateNo() {
+      try {
+        if (currentIndex < products.length - 1) {
+          const options = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/no`,
+            data: { currentProduct },
+          };
+          const response = await axios.request(options);
+          if (response) {
+            setCurrentProduct(products[currentIndex + 1]);
+            setCurrentIndex(currentIndex + 1);
+            console.log(response, "got em");
+          }
+        } else {
+          const options = {
+            method: "PUT",
+            url: `${process.env.REACT_APP_SERVER_URL}/products/${currentProduct.product_id}/no`,
+            data: { currentProduct },
+          };
+          const response = await axios.request(options);
+          if (response) {
+            console.log(response, "finished");
+            navigate("/");
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    updateNo();
+    console.log("Went through");
+  }
+
   return (
     <div>
       {showTransition ? (
@@ -96,15 +132,18 @@ export default function Survey({ showTransition, handleTransition }: any) {
         >
           <>
             {survey && currentProduct ? (
-              <div className="card text-center">
+              <div 
+              className="card text-center"
+              style={{width:"30rem"}}
+              >
                 <div
                   className="card-header"
                   style={{ backgroundColor: "#000" }}
                 >
                   {currentProduct.product_name}
                 </div>
-                <div className="">
-                  <img src={currentProduct.product_img} alt="product" />
+                <div className="card-img">
+                  <img className="img-fluid" src={currentProduct.product_img} alt="product" />
                 </div>
                 <div className="card-body display-me">
                   <p className="card-text">
@@ -119,7 +158,11 @@ export default function Survey({ showTransition, handleTransition }: any) {
                     >
                       Yes
                     </button>
-                    <button type="button" className="btn btn-danger ml-2">
+                    <button 
+                    type="button" 
+                    onClick={handleNo}
+                    className="btn btn-danger ml-2"
+                    >
                       No
                     </button>
                   </div>

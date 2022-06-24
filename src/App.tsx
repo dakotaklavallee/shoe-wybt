@@ -114,6 +114,7 @@ function App() {
                 isAuthenticated={isAuthenticated}
                 userAvatar={userAvatar}
                 todaysSurvey={surveys[0]}
+                handleTransition={handleTransition}
               />
             }
           />

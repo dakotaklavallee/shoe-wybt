@@ -5,15 +5,15 @@
     300deg,
     deepskyblue,
     darkviolet,
-    #ff00e6,
-    #60168a,
-    #a5a367
+    #8bdbbd,
+    #dc3ed7,
+    #aea91a
   );
   background-size: 300% 300%;
-  animation: gradient-animation 30s ease infinite;
+  animation: gradient-animation 20s ease infinite;
 }
 
-.display-me a{
+.display-me button{
   background-color: #000;
   color: #fff;
 }
