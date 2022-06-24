@@ -8,13 +8,13 @@ import "./App.css";
 import axios from "axios";
 import Survey from "./Components/Surveys/Survey";
 import UserPage from "./Components/Landings/UserPage";
+import AvatarSelect from "./Components/Avatars/AvatarSelect";
 
 function App() {
   const { loginWithRedirect, user, logout, isAuthenticated } = useAuth0();
   const [mainUser, setMainUser] = useState({});
   const [users, setUsers] = useState([]);
   const [avatars, setAvatars] = useState([]);
-  const [userAvatar, setUserAvatar] = useState({});
   const [surveys, setSurveys] = useState([]);
   const [showTransition, setShowTransition] = useState(false);
 
@@ -43,12 +43,8 @@ function App() {
     try {
       if (isAuthenticated) {
         const foundUser = users.find((usr: any) => usr.email === user!.email);
-        const foundAvatar = avatars.find(
-          (avatr: any) => avatr.avatar_id === foundUser.avatar_id
-        );
         console.log(foundUser);
         setMainUser(foundUser);
-        setUserAvatar(foundAvatar);
       }
     } catch (error) {
       console.log(error);
@@ -112,7 +108,6 @@ function App() {
               <HomePage
                 mainUser={mainUser}
                 isAuthenticated={isAuthenticated}
-                userAvatar={userAvatar}
                 todaysSurvey={surveys[0]}
                 handleTransition={handleTransition}
               />
@@ -141,8 +136,9 @@ function App() {
           />
           <Route
             path="/user"
-            element={<UserPage userAvatar={userAvatar} user={mainUser} />}
+            element={<UserPage avatars={avatars} user={mainUser} />}
           />
+          <Route path="/avatar" element={<AvatarSelect avatars={avatars} user={mainUser} />} />
         </Routes>
       </div>
       <Footer />

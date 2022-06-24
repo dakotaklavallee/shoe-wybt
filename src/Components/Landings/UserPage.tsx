@@ -4,8 +4,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./UserPage.css";
 
-export default function UserPage({ userAvatar, user }: any) {
-  const [currentUser, setCurrentUser] = useState({points: 0});
+export default function UserPage({ avatars, user }: any) {
+  const [currentUser, setCurrentUser] = useState({ points: 0 });
+  const [userAvatar, setUserAvatar] = useState({ avatar_url: "" });
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
@@ -15,7 +16,14 @@ export default function UserPage({ userAvatar, user }: any) {
             url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}`,
           };
           const response = await axios.request(options);
-          setCurrentUser(response.data.data);
+          if (response) {
+            setUserAvatar(
+              avatars.find(
+                (tar) => tar.avatar_id === response.data.data.avatar_id
+              )
+            );
+            setCurrentUser(response.data.data);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -25,7 +33,7 @@ export default function UserPage({ userAvatar, user }: any) {
   });
   return (
     <>
-      {Object.keys(currentUser).length ? (
+      {Object.keys(currentUser).length && Object.keys(userAvatar).length ? (
         <div
           style={{ height: "90vh" }}
           className="d-flex align-items-center justify-content-center"
@@ -46,7 +54,7 @@ export default function UserPage({ userAvatar, user }: any) {
               <Link to="/rewards" className="btn btn-secondary col-12 mt-2">
                 Redeem Points
               </Link>
-              <Link to="/rewards" className="btn btn-secondary col-12 mt-3">
+              <Link to="/avatar" className="btn btn-secondary col-12 mt-3">
                 Change Avatar
               </Link>
             </div>
