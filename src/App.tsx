@@ -9,6 +9,7 @@ import axios from "axios";
 import Survey from "./Components/Surveys/Survey";
 import UserPage from "./Components/Landings/UserPage";
 import AvatarSelect from "./Components/Avatars/AvatarSelect";
+import RedeemPage from "./Components/Rewards/RedeemPage";
 
 function App() {
   const { loginWithRedirect, user, logout, isAuthenticated } = useAuth0();
@@ -139,6 +140,7 @@ function App() {
             element={<UserPage avatars={avatars} user={mainUser} />}
           />
           <Route path="/avatar" element={<AvatarSelect avatars={avatars} user={mainUser} />} />
+          <Route path="/rewards" element={<RedeemPage user={mainUser} />} />
         </Routes>
       </div>
       <Footer />
