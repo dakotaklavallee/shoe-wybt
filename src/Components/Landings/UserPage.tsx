@@ -1,12 +1,23 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./UserPage.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function UserPage({ avatars, user }: any) {
   const [currentUser, setCurrentUser] = useState({ points: 0 });
   const [userAvatar, setUserAvatar] = useState({ avatar_url: "" });
+  const { logout } = useAuth0();
+  const navigate = useNavigate();
+
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    logout();
+    navigate("/");
+
+  }
+
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
@@ -57,6 +68,9 @@ export default function UserPage({ avatars, user }: any) {
               <Link to="/avatar" className="btn btn-secondary col-12 mt-3">
                 Change Avatar
               </Link>
+              <button onClick={handleSignOut} className="btn btn-secondary col-12 mt-3">
+                Sign Out
+              </button>
             </div>
           </div>
         </div>

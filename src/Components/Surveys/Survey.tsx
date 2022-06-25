@@ -189,8 +189,12 @@ export default function Survey({ showTransition, user }: any) {
           const response = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response && response2) {
-            console.log(response, "finished");
-            navigate("/");
+            const finishedUser = await finishUserSurvey();
+            const pointsAdded = await addPointsForUser();
+            if (finishedUser && pointsAdded) {
+              console.log(response, response2, "finished");
+              navigate("/");
+            }
           }
         }
       } catch (error) {

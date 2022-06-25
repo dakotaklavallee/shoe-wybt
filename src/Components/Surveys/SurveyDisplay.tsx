@@ -40,7 +40,7 @@ export default function SurveyDisplay({
   };
   return (
     <>
-      {Object.keys(todaysSurvey).length && Object.keys(currentUser) ? (
+      {currentUser && Object.keys(todaysSurvey).length && Object.keys(currentUser) ? (
         <>
           {currentUser.survey_done === false ? (
             <SurveyDisplayCard

@@ -18,6 +18,7 @@ function App() {
   const [avatars, setAvatars] = useState([]);
   const [surveys, setSurveys] = useState([]);
   const [showTransition, setShowTransition] = useState(false);
+  console.log(isAuthenticated);
 
   const handleTransition = () => {
     setShowTransition(true);
@@ -41,16 +42,41 @@ function App() {
   }, []);
 
   useEffect(() => {
-    try {
-      if (isAuthenticated) {
-        const foundUser = users.find((usr: any) => usr.email === user!.email);
-        console.log(foundUser);
-        setMainUser(foundUser);
+    async function authenticateUser() {
+      try {
+        if (isAuthenticated) {
+          const foundUser = users.find((usr: any) => usr.email === user!.email);
+          if (foundUser) {
+            console.log(foundUser);
+            setMainUser(foundUser);
+          } else {
+            const data = {
+              username: user.email.split("@")[0],
+              email: user.email,
+              avatar_id: 1,
+              survey_done: false,
+              survey_index: 1,
+              points: 0,
+            }
+            const options = {
+              method: "POST",
+              url: `${process.env.REACT_APP_SERVER_URL}/users`,
+              data: {data: data}
+            };
+            const response = await axios.request(options);
+            if(response){
+              setMainUser(response.data.data);
+              console.log(response, "Posted");
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        logout();
       }
-    } catch (error) {
-      console.log(error);
     }
-  }, [isAuthenticated, user, users, avatars]);
+    authenticateUser();
+  }, [isAuthenticated, user, users, avatars, logout]);
 
   useEffect(() => {
     const cancelToken = axios.CancelToken;
@@ -106,12 +132,17 @@ function App() {
           <Route
             path="/"
             element={
+              isAuthenticated ?
               <HomePage
                 mainUser={mainUser}
                 isAuthenticated={isAuthenticated}
                 todaysSurvey={surveys[0]}
                 handleTransition={handleTransition}
-              />
+              /> : <LoginPage
+              signInHandler={signInHandler}
+              signOutHandler={signOutHandler}
+              isAuthenticated={isAuthenticated}
+            />
             }
           />
           <Route
@@ -126,20 +157,13 @@ function App() {
             }
           />
           <Route
-            path="/login"
-            element={
-              <LoginPage
-                signInHandler={signInHandler}
-                signOutHandler={signOutHandler}
-                isAuthenticated={isAuthenticated}
-              />
-            }
-          />
-          <Route
             path="/user"
             element={<UserPage avatars={avatars} user={mainUser} />}
           />
-          <Route path="/avatar" element={<AvatarSelect avatars={avatars} user={mainUser} />} />
+          <Route
+            path="/avatar"
+            element={<AvatarSelect avatars={avatars} user={mainUser} />}
+          />
           <Route path="/rewards" element={<RedeemPage user={mainUser} />} />
         </Routes>
       </div>

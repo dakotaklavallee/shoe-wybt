@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import NoMoreSurveys from "../Surveys/NoMoreSurveys";
 import SurveyDisplay from "../Surveys/SurveyDisplay";
 
@@ -54,12 +53,7 @@ export default function HomePage({
             )}
           </div>
         </div>
-      ) : (
-        <div>
-          <h2>Please Sign In To See Your Content</h2>
-          <Link to="/login">Sign In</Link>
-        </div>
-      )}
+      ) : null }
     </>
   );
 }
