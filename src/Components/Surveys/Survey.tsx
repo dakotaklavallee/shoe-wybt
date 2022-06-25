@@ -1,11 +1,14 @@
 import React from "react";
 import axios from "axios";
+import { AiFillHeart } from "react-icons/ai";
+import { BsCheckLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ShoeLoading from "../Transitions/ShoeLoading";
 export default function Survey({ showTransition, user }: any) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [liked, setLiked] = useState(false);
   const initialSurveyData = {
     survey_name: "",
     survey_description: "",
@@ -118,6 +121,7 @@ export default function Survey({ showTransition, user }: any) {
           const response1 = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response1 && response2) {
+            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
             console.log(response1, response2, "got em");
@@ -171,6 +175,7 @@ export default function Survey({ showTransition, user }: any) {
           const response = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response && response2) {
+            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
             console.log(response, "got em");
@@ -203,6 +208,25 @@ export default function Survey({ showTransition, user }: any) {
     }
     updateNo();
     console.log("Went through");
+  };
+
+  const handleLike = async (e) => {
+    const newLike = {
+      product_id: currentProduct.product_id,
+      user_id: user.user_id,
+    };
+    try{
+      const options = {
+        method: "POST",
+        url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/likes`,
+        data: {data : newLike}
+      };
+      const response = await axios.request(options);
+      console.log(response, "Added Like");
+      setLiked(true);
+    }catch(error){
+      console.log(error);
+    }
   };
 
   return (
@@ -251,10 +275,16 @@ export default function Survey({ showTransition, user }: any) {
                       No
                     </button>
                   </div>
-                  <div className="mt-2">
-                    <p>
+                  <div className="mt-2 d-flex justify-content-between align-items-center">
+                    <p className="d-flex align-items-center mt-3">
                       Product {currentIndex + 1} / {products.length}
                     </p>
+                    {
+                      !liked ? <button onClick={handleLike} className="p-3 px-4">
+                      <AiFillHeart />
+                    </button> : <button className="p-3 px-4"><BsCheckLg /></button>
+                    }
+                    
                   </div>
                 </div>
               </div>

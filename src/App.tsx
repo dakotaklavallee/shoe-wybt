@@ -10,6 +10,7 @@ import Survey from "./Components/Surveys/Survey";
 import UserPage from "./Components/Landings/UserPage";
 import AvatarSelect from "./Components/Avatars/AvatarSelect";
 import RedeemPage from "./Components/Rewards/RedeemPage";
+import LikePage from "./Components/Likes/LikePage";
 
 function App() {
   const { loginWithRedirect, user, logout, isAuthenticated } = useAuth0();
@@ -164,6 +165,7 @@ function App() {
             path="/avatar"
             element={<AvatarSelect avatars={avatars} user={mainUser} />}
           />
+          <Route path="/likes" element={<LikePage user={mainUser} />} />
           <Route path="/rewards" element={<RedeemPage user={mainUser} />} />
         </Routes>
       </div>
