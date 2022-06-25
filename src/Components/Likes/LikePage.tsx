@@ -5,7 +5,7 @@ import axios from "axios";
 export default function LikePage({ user }: any) {
   const [likedProducts, setLikedProducts] = useState([]);
   const likeMap = likedProducts.map((like) => (
-    <LikeCard product={like} key={like.product_id} />
+    <LikeCard product={like} user={user} key={like.product_id} />
   ));
   useEffect(() => {
     async function fetchLiked() {
@@ -30,10 +30,10 @@ export default function LikePage({ user }: any) {
       }
     }
     fetchLiked();
-  });
+  }, [user]);
 
   return (
-    <div className="container" style={{height: "90vh"}}>
+    <div className="container" style={{ height: "90vh" }}>
       <div>
         <h1>liked</h1>
       </div>
