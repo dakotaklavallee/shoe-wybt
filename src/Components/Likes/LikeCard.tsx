@@ -5,7 +5,6 @@ import { FaTimes } from "react-icons/fa";
 
 export default function LikeCard({ product, user }: any) {
   const navigate = useNavigate();
-
   const handleRemoveLike = async () => {
     if (
       window.confirm(
@@ -21,8 +20,8 @@ export default function LikeCard({ product, user }: any) {
         };
         const response = await axios.request(options);
         if (response) {
-          console.log("Deleted")
-          navigate(0);
+
+          setTimeout(() => navigate(0), 2000);
         }
       } catch (error) {
         console.log(error);
@@ -36,7 +35,7 @@ export default function LikeCard({ product, user }: any) {
         {product.product_name}
       </div>
       <div className="card-img">
-        <img src={product.product_img} alt="product" />
+        <img className="img-fluid" src={product.product_img} alt="product" />
       </div>
       <div className="card-body display-me">
         <p className="card-text">{product.product_description}</p>

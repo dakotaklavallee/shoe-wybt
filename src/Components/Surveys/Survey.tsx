@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { useReward } from "react-rewards";
 import { AiFillHeart } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,14 @@ import { useEffect, useState } from "react";
 import ShoeLoading from "../Transitions/ShoeLoading";
 export default function Survey({ showTransition, user }: any) {
   const navigate = useNavigate();
+  const { reward, isAnimating } = useReward("rewardId", "emoji", {
+    emoji: ["❤️"],
+  });
+  const { reward: checkBox, isAnimating: checkBoxAnimating } = useReward(
+    "checkReward",
+    "emoji",
+    { emoji: ["✅"] }
+  );
   const [products, setProducts] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
   const initialSurveyData = {
@@ -28,9 +37,6 @@ export default function Survey({ showTransition, user }: any) {
     ...initialProductData,
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(
-    likedProducts.filter((e) => e.product_name === currentProduct.product_name)
-  );
 
   useEffect(() => {
     async function fetchSurveys() {
@@ -52,21 +58,22 @@ export default function Survey({ showTransition, user }: any) {
       }
     }
     async function userFetch() {
-      try {
-        const options = {
-          method: "GET",
-          url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}`,
-        };
-        const response = await axios.request(options);
-        console.log(response.data.data);
-        setCurrentIndex(response.data.data.survey_index - 1);
-        fetchSurveys();
-      } catch (error) {
-        console.log(error);
+      if (Object.keys(user).length) {
+        try {
+          const options = {
+            method: "GET",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}`,
+          };
+          const response = await axios.request(options);
+          setCurrentIndex(response.data.data.survey_index - 1);
+          fetchSurveys();
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     userFetch();
-  }, [user.survey_index, currentIndex, user.user_id]);
+  }, [user.survey_index, currentIndex, user, user.user_id]);
 
   useEffect(() => {
     async function fetchLiked() {
@@ -78,7 +85,6 @@ export default function Survey({ showTransition, user }: any) {
           };
           const response = await axios.request(options);
           if (response) {
-            console.log(response);
             const data = response.data.data.reduce((acc, userLike) => {
               acc.push(userLike.products[0]);
               return acc;
@@ -103,7 +109,6 @@ export default function Survey({ showTransition, user }: any) {
       };
       const response = await axios.request(options);
       if (response) {
-        console.log(response, "Finished User");
         return response;
       }
     } catch (error) {
@@ -121,7 +126,6 @@ export default function Survey({ showTransition, user }: any) {
       };
       const response = await axios.request(options);
       if (response) {
-        console.log(response, "Added Points");
         return response;
       }
     } catch (error) {
@@ -150,7 +154,6 @@ export default function Survey({ showTransition, user }: any) {
           if (response1 && response2) {
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
-            console.log(response1, response2, "got em");
           }
         } else {
           const options = {
@@ -169,7 +172,6 @@ export default function Survey({ showTransition, user }: any) {
             const finishedUser = await finishUserSurvey();
             const pointsAdded = await addPointsForUser();
             if (finishedUser && pointsAdded) {
-              console.log(response1, response2, "finished");
               navigate("/");
             }
           }
@@ -179,7 +181,6 @@ export default function Survey({ showTransition, user }: any) {
       }
     }
     updateYes();
-    console.log("Went through");
   };
 
   const handleNo = async (e) => {
@@ -203,7 +204,6 @@ export default function Survey({ showTransition, user }: any) {
           if (response && response2) {
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
-            console.log(response, "got em");
           }
         } else {
           const options = {
@@ -222,7 +222,6 @@ export default function Survey({ showTransition, user }: any) {
             const finishedUser = await finishUserSurvey();
             const pointsAdded = await addPointsForUser();
             if (finishedUser && pointsAdded) {
-              console.log(response, response2, "finished");
               navigate("/");
             }
           }
@@ -232,7 +231,6 @@ export default function Survey({ showTransition, user }: any) {
       }
     }
     updateNo();
-    console.log("Went through");
   };
 
   const handleLike = async (e) => {
@@ -247,8 +245,10 @@ export default function Survey({ showTransition, user }: any) {
         data: { data: newLike },
       };
       const response = await axios.request(options);
-      console.log(response, "Added Like");
-      navigate(0);
+      if (response) {
+        reward();
+        setTimeout(() => navigate(0), 3000);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -304,14 +304,24 @@ export default function Survey({ showTransition, user }: any) {
                     <p className="d-flex align-items-center mt-3">
                       Product {currentIndex + 1} / {products.length}
                     </p>
+                    <span id="rewardId" />
+                    <span id="checkReward" />
                     {!likedProducts.filter(
                       (e) => e.product_name === currentProduct.product_name
                     ).length ? (
-                      <button onClick={handleLike} className="p-3 px-4">
+                      <button
+                        onClick={handleLike}
+                        disabled={isAnimating}
+                        className="p-3 px-4"
+                      >
                         <AiFillHeart />
                       </button>
                     ) : (
-                      <button className="p-3 px-4">
+                      <button
+                        onClick={checkBox}
+                        disabled={checkBoxAnimating}
+                        className="p-3 px-4"
+                      >
                         <BsCheckLg />
                       </button>
                     )}

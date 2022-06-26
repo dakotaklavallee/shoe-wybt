@@ -19,7 +19,6 @@ function App() {
   const [avatars, setAvatars] = useState([]);
   const [surveys, setSurveys] = useState([]);
   const [showTransition, setShowTransition] = useState(false);
-  console.log(isAuthenticated);
 
   const handleTransition = () => {
     setShowTransition(true);
@@ -48,7 +47,6 @@ function App() {
         if (isAuthenticated) {
           const foundUser = users.find((usr: any) => usr.email === user!.email);
           if (foundUser) {
-            console.log(foundUser);
             setMainUser(foundUser);
           } else {
             const data = {
@@ -67,7 +65,6 @@ function App() {
             const response = await axios.request(options);
             if(response){
               setMainUser(response.data.data);
-              console.log(response, "Posted");
             }
           }
         }

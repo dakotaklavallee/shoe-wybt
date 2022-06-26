@@ -17,7 +17,6 @@ export default function LikePage({ user }: any) {
           };
           const response = await axios.request(options);
           if (response) {
-            console.log(response);
             const data = response.data.data.reduce((acc, userLike) => {
               acc.push(userLike.products[0]);
               return acc;

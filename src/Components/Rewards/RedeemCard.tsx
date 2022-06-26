@@ -26,7 +26,6 @@ export default function RedeemCard({user}: any){
             };
             const response = await axios.request(options);
             if (response) {
-              console.log(response, "Redeemed Points");
               return response;
             }
           } catch (error) {
