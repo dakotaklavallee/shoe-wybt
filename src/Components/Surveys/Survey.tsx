@@ -8,7 +8,7 @@ import ShoeLoading from "../Transitions/ShoeLoading";
 export default function Survey({ showTransition, user }: any) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [liked, setLiked] = useState(false);
+  const [likedProducts, setLikedProducts] = useState([]);
   const initialSurveyData = {
     survey_name: "",
     survey_description: "",
@@ -28,7 +28,9 @@ export default function Survey({ showTransition, user }: any) {
     ...initialProductData,
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(currentIndex);
+  console.log(
+    likedProducts.filter((e) => e.product_name === currentProduct.product_name)
+  );
 
   useEffect(() => {
     async function fetchSurveys() {
@@ -65,6 +67,31 @@ export default function Survey({ showTransition, user }: any) {
     }
     userFetch();
   }, [user.survey_index, currentIndex, user.user_id]);
+
+  useEffect(() => {
+    async function fetchLiked() {
+      try {
+        if (Object.keys(user).length) {
+          const options = {
+            method: "GET",
+            url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/likes`,
+          };
+          const response = await axios.request(options);
+          if (response) {
+            console.log(response);
+            const data = response.data.data.reduce((acc, userLike) => {
+              acc.push(userLike.products[0]);
+              return acc;
+            }, []);
+            setLikedProducts(data);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchLiked();
+  }, [user]);
 
   const finishUserSurvey = async () => {
     try {
@@ -121,7 +148,6 @@ export default function Survey({ showTransition, user }: any) {
           const response1 = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response1 && response2) {
-            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
             console.log(response1, response2, "got em");
@@ -175,7 +201,6 @@ export default function Survey({ showTransition, user }: any) {
           const response = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response && response2) {
-            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
             console.log(response, "got em");
@@ -215,16 +240,16 @@ export default function Survey({ showTransition, user }: any) {
       product_id: currentProduct.product_id,
       user_id: user.user_id,
     };
-    try{
+    try {
       const options = {
         method: "POST",
         url: `${process.env.REACT_APP_SERVER_URL}/users/${user.user_id}/likes`,
-        data: {data : newLike}
+        data: { data: newLike },
       };
       const response = await axios.request(options);
       console.log(response, "Added Like");
-      setLiked(true);
-    }catch(error){
+      navigate(0);
+    } catch (error) {
       console.log(error);
     }
   };
@@ -239,7 +264,7 @@ export default function Survey({ showTransition, user }: any) {
           className="d-flex align-items-center justify-content-center"
         >
           <>
-            {survey && currentProduct ? (
+            {survey && currentProduct && likedProducts ? (
               <div className="card text-center" style={{ width: "30rem" }}>
                 <div
                   className="card-header"
@@ -279,12 +304,17 @@ export default function Survey({ showTransition, user }: any) {
                     <p className="d-flex align-items-center mt-3">
                       Product {currentIndex + 1} / {products.length}
                     </p>
-                    {
-                      !liked ? <button onClick={handleLike} className="p-3 px-4">
-                      <AiFillHeart />
-                    </button> : <button className="p-3 px-4"><BsCheckLg /></button>
-                    }
-                    
+                    {!likedProducts.filter(
+                      (e) => e.product_name === currentProduct.product_name
+                    ).length ? (
+                      <button onClick={handleLike} className="p-3 px-4">
+                        <AiFillHeart />
+                      </button>
+                    ) : (
+                      <button className="p-3 px-4">
+                        <BsCheckLg />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
