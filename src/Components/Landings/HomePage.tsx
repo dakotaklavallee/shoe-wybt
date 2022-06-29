@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import NoMoreSurveys from "../Surveys/NoMoreSurveys";
 import SurveyDisplay from "../Surveys/SurveyDisplay";
+import 'animate.css';
 
 export default function HomePage({
   mainUser,
@@ -40,7 +41,7 @@ export default function HomePage({
           </div>
           <div
             style={{ height: "75vh" }}
-            className="d-flex align-items-center justify-content-center"
+            className="d-flex align-items-center justify-content-center animate__animated animate__slideInUp"
           >
             {!currentUser.survey_done ? (
               <SurveyDisplay

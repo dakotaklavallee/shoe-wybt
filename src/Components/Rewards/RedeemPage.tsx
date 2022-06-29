@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import RedeemCard from "./RedeemCard";
+import "animate.css";
 
 export default function RedeemPage({ user }: any) {
   const [currentUser, setCurrentUser] = useState({ points: 0 });
@@ -29,7 +30,10 @@ export default function RedeemPage({ user }: any) {
       <div className="mt-4">
         <h2>redeem.</h2>
       </div>
-      <div className="d-flex justify-content-center mt-4">
+      <div
+        style={{ height: "75vh" }}
+        className="d-flex align-items-center justify-content-center animate__animated animate__slideInUp"
+      >
         {Object.keys(currentUser).length ? (
           <RedeemCard user={currentUser} />
         ) : null}

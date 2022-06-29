@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./UserPage.css";
 import { useAuth0 } from "@auth0/auth0-react";
+import 'animate.css';
 
 export default function UserPage({ avatars, user }: any) {
   const [currentUser, setCurrentUser] = useState({ points: 0 });
@@ -47,7 +48,7 @@ export default function UserPage({ avatars, user }: any) {
       {Object.keys(currentUser).length && Object.keys(userAvatar).length ? (
         <div
           style={{ height: "90vh" }}
-          className="d-flex align-items-center justify-content-center"
+          className="d-flex align-items-center justify-content-center animate__animated animate__fadeInDown"
         >
           <div className="card text-center" style={{ width: "80vh" }}>
             <div className="card-header" style={{ backgroundColor: "#000" }}>
@@ -61,15 +62,15 @@ export default function UserPage({ avatars, user }: any) {
               />
             </div>
             <div className="card-body">
-              <h5>Total Points: {currentUser.points}</h5>
+              <h5>total points: {currentUser.points}</h5>
               <Link to="/rewards" className="btn btn-secondary col-12 mt-2">
-                Redeem Points
+                redeem points
               </Link>
               <Link to="/avatar" className="btn btn-secondary col-12 mt-3">
-                Change Avatar
+                change avatar
               </Link>
               <button onClick={handleSignOut} className="btn btn-secondary col-12 mt-3">
-                Sign Out
+                sign out
               </button>
             </div>
           </div>

@@ -1,17 +1,21 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap');
+* {
   background-color: black;
   color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  overflow: hidden;
 }
 
-.user-avatar-picker{
+.user-avatar-picker {
   width: 100%;
   max-width: 200px;
   border: 3px solid #fff;
   border-radius: 50%;
 }
 
-.user-avatar-picker:hover{
+.user-avatar-picker:hover {
   opacity: 50%;
   cursor: pointer;
   transition: all 0.7s;
 }
+

@@ -6,6 +6,9 @@ import { BsCheckLg } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ShoeLoading from "../Transitions/ShoeLoading";
+import './Survey.css';
+import "animate.css";
+
 export default function Survey({ showTransition, user }: any) {
   const navigate = useNavigate();
   const { reward, isAnimating } = useReward("rewardId", "emoji", {
@@ -261,7 +264,7 @@ export default function Survey({ showTransition, user }: any) {
       ) : (
         <div
           style={{ height: "90vh" }}
-          className="d-flex align-items-center justify-content-center"
+          className="d-flex align-items-center justify-content-center animate__animated animate__fadeIn"
         >
           <>
             {survey && currentProduct && likedProducts ? (
@@ -270,7 +273,9 @@ export default function Survey({ showTransition, user }: any) {
                   className="card-header"
                   style={{ backgroundColor: "#000" }}
                 >
-                  {currentProduct.product_name}
+                  <h5 className="mt-2">
+                  {currentProduct.product_name.toLowerCase()}
+                  </h5>
                 </div>
                 <div className="card-img">
                   <img
@@ -281,21 +286,25 @@ export default function Survey({ showTransition, user }: any) {
                 </div>
                 <div className="card-body display-me">
                   <p className="card-text">
-                    {currentProduct.product_description}
+                    {currentProduct.product_description.toLowerCase()}
                   </p>
                   <div>
                     <p>would you buy this?</p>
+                  </div>
+                  <div>
                     <button
                       type="button"
                       onClick={handleYes}
-                      className="btn btn-secondary"
+                      className="btn btn-success w-100"
                     >
                       Yes
                     </button>
+                  </div>
+                  <div>
                     <button
                       type="button"
                       onClick={handleNo}
-                      className="btn btn-danger ml-2"
+                      className="btn btn-danger mt-2 w-100"
                     >
                       No
                     </button>
@@ -312,7 +321,7 @@ export default function Survey({ showTransition, user }: any) {
                       <button
                         onClick={handleLike}
                         disabled={isAnimating}
-                        className="p-3 px-4"
+                        className="p-3 px-4 like-button"
                       >
                         <AiFillHeart />
                       </button>

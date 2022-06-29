@@ -44,18 +44,18 @@ export default function RedeemCard({user}: any){
     return (
         <div className="card text-center" style={{ width: "30rem" }}>
           <div className="card-header" style={{ backgroundColor: "#000" }}>
-            Rewards
+            <h5 className="mt-2">rewards</h5>
           </div>
           <div className="image-vibe"></div>
           <div className="card-body display-me">
-              <p>Claim Your Rewards Below</p>
+              <p>claim your rewards below</p>
               <div>
                   {user.points >= 1000 ? 
                   <button disabled={isAnimating} onClick={handleRedeem}>
-                      Shoe Inc. Rewards Code - 1000 Points
+                      shoe inc. rewards code - 1000 Points
                       <span id="rewardId" />
                       </button>
-                  : <button>Not Enough Points</button>
+                  : <button>not enough points</button>
                 }
               </div>
               <div>
