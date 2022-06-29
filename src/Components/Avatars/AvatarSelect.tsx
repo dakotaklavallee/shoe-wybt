@@ -6,8 +6,8 @@ export default function AvatarSelect({ avatars, user }: any) {
     <Avatar key={tar.avatar_id} url={tar.avatar_url} id={tar.avatar_id} user={user} />
   ));
   return (
-    <div className="container d-flex align-items-center" style={{height: "90vh"}}>
-      <div className="col" style={{height: "80vh"}}>
+    <div className="container d-flex align-items-center mt-3" style={{height: "90vh"}}>
+      <div className="col align-items-center">
         {avatars.length ? 
         <>
         <div className="row d-flex justify-content-center">
