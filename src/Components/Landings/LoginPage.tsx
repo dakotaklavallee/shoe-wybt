@@ -9,7 +9,7 @@ export default function LoginPage({
   isAuthenticated,
 }: any) {
   return (
-    <div className="container">
+    <div className="container login-page">
       <div
         className="row d-flex align-items-center"
       >
