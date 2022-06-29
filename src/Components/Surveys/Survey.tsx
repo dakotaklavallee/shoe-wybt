@@ -21,6 +21,7 @@ export default function Survey({ showTransition, user }: any) {
   );
   const [products, setProducts] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
+  const [liked, setLiked] = useState(false);
   const initialSurveyData = {
     survey_name: "",
     survey_description: "",
@@ -155,6 +156,7 @@ export default function Survey({ showTransition, user }: any) {
           const response1 = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response1 && response2) {
+            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
           }
@@ -205,6 +207,7 @@ export default function Survey({ showTransition, user }: any) {
           const response = await axios.request(options);
           const response2 = await axios.request(options2);
           if (response && response2) {
+            setLiked(false);
             setCurrentProduct(products[currentIndex + 1]);
             setCurrentIndex(currentIndex + 1);
           }
@@ -250,7 +253,7 @@ export default function Survey({ showTransition, user }: any) {
       const response = await axios.request(options);
       if (response) {
         reward();
-        setTimeout(() => navigate(0), 3000);
+        setLiked(true);
       }
     } catch (error) {
       console.log(error);
@@ -315,9 +318,7 @@ export default function Survey({ showTransition, user }: any) {
                     </p>
                     <span id="rewardId" />
                     <span id="checkReward" />
-                    {!likedProducts.filter(
-                      (e) => e.product_name === currentProduct.product_name
-                    ).length ? (
+                    {!liked && !likedProducts.filter( p => p.product_name === currentProduct.product_name).length ? (
                       <button
                         onClick={handleLike}
                         disabled={isAnimating}
