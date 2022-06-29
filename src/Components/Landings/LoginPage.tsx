@@ -15,7 +15,10 @@ export default function LoginPage({
         style={{ height: "100vh" }}
       >
         <div className="col-sm-6 col-12 text-center">
-          <ShoeText />
+          <div className="m-0 p-0">
+            <ShoeText />
+          </div>
+          
           <p className="mb-0">
             your opinion matters.
           </p>
@@ -25,7 +28,7 @@ export default function LoginPage({
           <img src={shoeIntro} alt="shoe" width="300px" />
         </div>
         <div
-          className="col-12 col-sm-6 d-flex justify-content-center sign-in-button"
+          className="col-12 col-sm-6 d-flex justify-content-center sign-in-button mb-4"
         >
           {isAuthenticated ? (
             <button
@@ -36,7 +39,7 @@ export default function LoginPage({
             </button>
           ) : (
             <button
-              className="btn btn-danger px-5 py-3"
+              className="btn btn-danger px-5 py-3 mb-4"
               onClick={signInHandler}
             >
               sign in

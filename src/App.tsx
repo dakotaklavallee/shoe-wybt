@@ -169,7 +169,7 @@ function App() {
           <Route path="/rewards" element={<RedeemPage user={mainUser} />} />
         </Routes>
       </div>
-      <>{isAuthenticated ? <Footer /> : null}</>
+      <>{Object.keys(mainUser).length ? <Footer /> : null}</>
     </div>
   );
 }
