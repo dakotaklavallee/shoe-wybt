@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "./Avatar";
+import 'animate.css';
 
 export default function AvatarSelect({ avatars, user }: any) {
   const avatarMap = avatars.map((tar) => (
@@ -9,7 +10,7 @@ export default function AvatarSelect({ avatars, user }: any) {
     <div className="container d-flex align-items-center" style={{height: "90vh"}}>
       <div className="col align-items-center">
         {avatars.length ? 
-        <>
+        <div className="animate__animated animate__fadeIn">
         <div className="row d-flex justify-content-center">
             <div className="text-center mr-3">{avatarMap[0]}</div>
             <div className="text-center">{avatarMap[1]}</div>
@@ -26,7 +27,7 @@ export default function AvatarSelect({ avatars, user }: any) {
             <div className="text-center mr-3">{avatarMap[6]}</div>
             <div className="text-center">{avatarMap[7]}</div>
         </div> 
-        </>
+        </div>
         :null}
       </div>
     </div>
