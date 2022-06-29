@@ -2,6 +2,7 @@ import React from "react";
 import shoeIntro from "../../img/shoeLogoPlain.svg";
 import {ReactComponent as ShoeText} from "../../img/shoe5.svg";
 import './LoginPage.css';
+import 'animate.css';
 
 export default function LoginPage({
   signInHandler,
@@ -9,7 +10,7 @@ export default function LoginPage({
   isAuthenticated,
 }: any) {
   return (
-    <div className="container login-page">
+    <div className="container login-page animate__animated animate__fadeIn">
       <div
         className="row d-flex align-items-center media-me"
       >
@@ -32,7 +33,6 @@ export default function LoginPage({
           {isAuthenticated ? (
             <button
               className="btn btn-danger px-5 py-3"
-              style={{backgroundColor: "black"}}
               onClick={signOutHandler}
             >
               sign out
@@ -40,7 +40,6 @@ export default function LoginPage({
           ) : (
             <button
               className="btn btn-danger px-5 py-3 mb-4"
-              style={{backgroundColor: "black"}}
               onClick={signInHandler}
             >
               sign in

@@ -1,4 +1,11 @@
+.sign-in-button button{
+    background-color: black;
+}
 
+.sign-in-button button:hover{
+    background-color: red;
+    transition: all 1s;
+}
 
 @media only screen and (max-width: 575px) {
     .sign-in-button{
