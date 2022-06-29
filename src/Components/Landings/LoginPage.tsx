@@ -11,7 +11,7 @@ export default function LoginPage({
   return (
     <div className="container login-page">
       <div
-        className="row d-flex align-items-center"
+        className="row d-flex align-items-center media-me"
       >
         <div className="col-sm-6 col-12 text-center mt-2">
           <div className="my-2 p-0">
