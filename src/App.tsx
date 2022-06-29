@@ -56,14 +56,14 @@ function App() {
               survey_done: false,
               survey_index: 1,
               points: 0,
-            }
+            };
             const options = {
               method: "POST",
               url: `${process.env.REACT_APP_SERVER_URL}/users`,
-              data: {data: data}
+              data: { data: data },
             };
             const response = await axios.request(options);
-            if(response){
+            if (response) {
               setMainUser(response.data.data);
             }
           }
@@ -130,17 +130,20 @@ function App() {
           <Route
             path="/"
             element={
-              isAuthenticated ?
-              <HomePage
-                mainUser={mainUser}
-                isAuthenticated={isAuthenticated}
-                todaysSurvey={surveys[0]}
-                handleTransition={handleTransition}
-              /> : <LoginPage
-              signInHandler={signInHandler}
-              signOutHandler={signOutHandler}
-              isAuthenticated={isAuthenticated}
-            />
+              isAuthenticated ? (
+                <HomePage
+                  mainUser={mainUser}
+                  isAuthenticated={isAuthenticated}
+                  todaysSurvey={surveys[0]}
+                  handleTransition={handleTransition}
+                />
+              ) : (
+                <LoginPage
+                  signInHandler={signInHandler}
+                  signOutHandler={signOutHandler}
+                  isAuthenticated={isAuthenticated}
+                />
+              )
             }
           />
           <Route
@@ -166,7 +169,7 @@ function App() {
           <Route path="/rewards" element={<RedeemPage user={mainUser} />} />
         </Routes>
       </div>
-      <Footer />
+      <>{isAuthenticated ? <Footer /> : null}</>
     </div>
   );
 }
