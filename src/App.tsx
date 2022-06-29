@@ -52,7 +52,7 @@ function App() {
             const data = {
               username: user.email.split("@")[0],
               email: user.email,
-              avatar_id: 1,
+              avatar_id: 3,
               survey_done: false,
               survey_index: 1,
               points: 0,
