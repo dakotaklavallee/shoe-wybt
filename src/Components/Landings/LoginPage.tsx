@@ -12,9 +12,8 @@ export default function LoginPage({
     <div className="container">
       <div
         className="row d-flex align-items-center"
-        style={{ height: "100vh" }}
       >
-        <div className="col-sm-6 col-12 text-center">
+        <div className="col-sm-6 col-12 text-center mt-2">
           <div className="my-2 p-0">
             <ShoeText />
           </div>
@@ -33,6 +32,7 @@ export default function LoginPage({
           {isAuthenticated ? (
             <button
               className="btn btn-danger px-5 py-3"
+              style={{backgroundColor: "black"}}
               onClick={signOutHandler}
             >
               sign out
@@ -40,6 +40,7 @@ export default function LoginPage({
           ) : (
             <button
               className="btn btn-danger px-5 py-3 mb-4"
+              style={{backgroundColor: "black"}}
               onClick={signInHandler}
             >
               sign in
