@@ -1,6 +1,6 @@
 import React from "react";
 import shoeIntro from "../../img/shoeLogoPlain.svg";
-import {ReactComponent as ShoeText} from "../../img/shoe3.svg";
+import {ReactComponent as ShoeText} from "../../img/shoe5.svg";
 import './LoginPage.css';
 
 export default function LoginPage({
@@ -15,7 +15,7 @@ export default function LoginPage({
         style={{ height: "100vh" }}
       >
         <div className="col-sm-6 col-12 text-center">
-          <div className="m-0 p-0">
+          <div className="my-2 p-0">
             <ShoeText />
           </div>
           
